@@ -1,0 +1,98 @@
+<span lass="alert alert-warning" *ngIf="error.isError">{{error.err}}</span>
+<div class="content" role="main">
+    <div class="d-inline">
+        <h3>Transactions</h3>    
+        <div class="space"></div>
+    </div>
+    <button [disabled]="loading" (click)="resetForm()" class="btn btn-warning">
+        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        Reset
+    </button>
+    <div class="card-container" >
+        <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="transaction_date_time">Transaction Date</label>
+                <input [owlDateTime]="dt1" [owlDateTimeTrigger]="dt1" formControlName="transaction_date_time" placeholder="Date Time"
+                [ngClass]="{ 'is-invalid': submitted && f.transaction_date_time.errors }">
+                <owl-date-time #dt1></owl-date-time>
+                <div *ngIf="submitted && f.transaction_date_time.errors" class="invalid-feedback">
+                    <div *ngIf="f.transaction_date_time.errors.required">Transaction Date is required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="customer_id">Customer Id</label>
+                <select formControlName="customer_id" class="form-controle">
+                    <option *ngFor="let customer of customers" [ngValue]="customer._id"> {{customer.name}}</option>
+                </select>
+                <div *ngIf="submitted && f.customer_id.errors" class="invalid-feedback">
+                    <div *ngIf="f.customer_id.errors.required">Customer is required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="product_id">Product Id</label>
+                <select formControlName="product_id" class="form-controle">
+                    <option *ngFor="let product of products" [ngValue]="product._id"> {{product.product_title}}</option>
+                </select>
+                <div *ngIf="submitted && f.product_id.errors" class="invalid-feedback">
+                    <div *ngIf="f.product_id.errors.required">Product is required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="transaction_type">Transaction Type</label>
+                <select formControlName="transaction_type" class="form-controle">
+                    <option value="OUT">OUT</option>
+                    <option value="IN">IN</option>
+                </select>
+                <div *ngIf="submitted && f.transaction_type.errors" class="invalid-feedback">
+                    <div *ngIf="f.transaction_type.errors.required">Transaction Type is required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" formControlName="quantity" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.quantity.errors }" />
+                <div *ngIf="submitted && f.quantity.errors" class="invalid-feedback">
+                    <div *ngIf="f.quantity.errors.required">Quantity is required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="transaction_id_parent">Transaction parent id</label>
+                <select formControlName="transaction_id_parent" class="form-controle" (change)="selectTransactionParent()">
+                    <option *ngFor="let transaction of transactionOutList" [ngValue]="transaction._id"> {{transaction._id}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button [disabled]="loading" class="btn btn-primary">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    Submit
+                </button>
+            </div>
+        </form>  
+    </div>
+    <div class="table-wrapper-scroll-y custom-scroll">
+        <table class="table table-bordered table-striped mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Transaction Id</th>
+                    <th scope="col">Transaction Date</th>
+                    <th scope="col">Customer Id</th>
+                    <th scope="col">Product Id</th>
+                    <th scope="col">Transaction Type</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Transaction Parent Id</th>
+                </tr>
+            </thead>
+            <tbody>
+                    <tr *ngFor="let row of transactionList  ">
+                        <td>{{row._id}}</td>
+                        <td>{{row.transaction_date_time}}</td>
+                        <td>{{row.customer_id}}</td>
+                        <td>{{row.product_id}}</td>
+                        <td>{{row.transaction_type}}</td>
+                        <td>{{row.quantity}}</td>
+                        <td>{{row.transaction_id_parent}}</td>
+                    </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

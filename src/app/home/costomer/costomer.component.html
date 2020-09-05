@@ -1,0 +1,40 @@
+<div class="content" role="main">
+    <div class="d-inline">
+        <h3>Customer</h3>
+        <div class="space"></div>
+    </div>
+    <div class="card-container">
+        <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="customer_name">Customer Name</label>
+                <input type="text" formControlName="customer_name" class="form-control"
+                    [ngClass]="{ 'is-invalid': submitted && f.customer_name.errors }" />
+                <div *ngIf="submitted && f.customer_name.errors" class="invalid-feedback">
+                    <div *ngIf="f.customer_name.errors.required">Name is required</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <button [disabled]="loading" class="btn btn-primary">
+                    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="table-wrapper-scroll-y custom-scroll">
+        <table class="table table-bordered table-striped mb-0">
+            <thead>
+                <tr>
+                    <th scope="col">Customer ID</th>
+                    <th scope="col">Customer Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of customerList">
+                    <td>{{row._id}}</td>
+                    <td>{{row.name}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
